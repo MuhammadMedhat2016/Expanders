@@ -1,0 +1,34 @@
+{
+  "name": "expanders",
+  "version": "1.0.0",
+  "description": "expanders360 Task",
+  "main": "./dist/main.js",
+  "scripts": {
+    "start:dev:compile": "tsc -w",
+    "start:dev:run": "nodemon ./dist/main.js",
+    "start:dev": "concurrently npm:start:dev:*"
+  },
+  "keywords": [
+    "expanders"
+  ],
+  "author": "Muhammad Medhat",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "@types/archiver": "^6.0.3",
+    "@types/express": "^5.0.3",
+    "@types/mongoose": "^5.11.96",
+    "@types/multer": "^2.0.0",
+    "archiver": "^7.0.1",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.0",
+    "multer": "^2.0.2",
+    "mysql2": "^3.14.4",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.26"
+  }
+}
