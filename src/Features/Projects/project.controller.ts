@@ -3,7 +3,7 @@ import { buildProjectMatchesService } from './project.service';
 import { ProjectMatchesRebuildParams } from './project.types';
 
 export const buildProjectMatches = asyncCatch<ProjectMatchesRebuildParams>(
-  (req, res) => {
+  async (req, res) => {
     if (!Number(req.params.projectId)) {
       res.status(400).json({
         status: 'error',
@@ -11,6 +11,11 @@ export const buildProjectMatches = asyncCatch<ProjectMatchesRebuildParams>(
       });
     }
 
-    buildProjectMatchesService(Number(req.params.projectId));
+    await buildProjectMatchesService(Number(req.params.projectId));
+
+    res.status(200).json({
+      status: 'success',
+      message: `project ${req.params.projectId} vendors score matches updated`,
+    });
   }
 );
