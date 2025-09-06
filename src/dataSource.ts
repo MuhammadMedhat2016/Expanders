@@ -1,15 +1,14 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { Client } from './Entities/Client';
-import { Project } from './Entities/Projects';
-import { Vendor } from './Entities/Vendors';
-import { VendorCountries } from './Entities/VendorCountries';
-import { VendorServices } from './Entities/VendorServices';
-import { ProjectServices } from './Entities/ProjectServices';
-import { Match } from './Entities/Match';
-import { Service } from './Entities/Services';
-import { Country } from './Entities/Country';
-
+import { Client } from './Features/Clients/client.entity';
+import { Project } from './Features/Projects/project.entity';
+import { Vendor } from './Features/Vendors/vendors.entity';
+import { VendorCountries } from './Features/VendorCountries/vendorCountries.entity';
+import { VendorServices } from './Features/VendorServices/vendorServices.entity';
+import { ProjectServices } from './Features/ProjectServices/projectServices.entity';
+import { Service } from './Features/Services/services.entity';
+import { Country } from './Features/Countries/country.entity';
+import { Match } from './Features/Matches/match.entity';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -27,8 +26,8 @@ export const AppDataSource = new DataSource({
     VendorCountries,
     VendorServices,
     ProjectServices,
-    Match,
     Service,
+    Match,
     Country,
   ],
   migrations: [],

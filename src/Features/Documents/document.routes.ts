@@ -12,4 +12,4 @@ router.get('/downloads', downloadDocuments);
 router.post('/', uploadDocumentMulter.single('document'), uploadDocument);
 router.get('/', getDocuments);
 
-export { router };
+export const documentsRouter = router;

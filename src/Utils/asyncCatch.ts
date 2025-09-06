@@ -1,9 +1,41 @@
 import { NextFunction, Request, Response } from 'express';
 
-type RouteHandler = (request: Request, response: Response) => void;
+export type TypedRequest<
+  Params,
+  ReqBody,
+  ReqQuery,
+  Locals extends Record<string, any>
+> = Request<Params, {}, ReqBody, ReqQuery, Locals>;
 
-export function asyncCatch(routeHandler: RouteHandler) {
-  return async function (req: Request, res: Response, next: NextFunction) {
+export type TypedResponse<
+  ResBody,
+  Locals extends Record<string, string>
+> = Response<ResBody, Locals>;
+
+export type RouteHandler<
+  Params,
+  ResBody,
+  ReqBody,
+  ReqQuery,
+  Locals extends Record<string, any>
+> = (
+  req: TypedRequest<Params, ReqBody, ReqQuery, Locals>,
+  res: TypedResponse<ResBody, Locals>
+) => any;
+
+export function asyncCatch<
+  Params = Record<string, string>,
+  ResBody = any,
+  ReqBody = any,
+  ReqQuery = Record<string, string>,
+  Locals extends Record<string, any> = Record<string, any>
+>
+(routeHandler: RouteHandler<Params, ResBody, ReqBody, ReqQuery, Locals>) {
+  return async function (
+    req: TypedRequest<Params, ReqBody, ReqQuery, Locals>,
+    res: TypedResponse<ResBody, Locals>,
+    next: NextFunction
+  ) {
     try {
       await routeHandler(req, res);
     } catch (error) {

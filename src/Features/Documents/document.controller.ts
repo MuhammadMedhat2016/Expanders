@@ -67,7 +67,6 @@ export const downloadDocuments = asyncCatch(
     const zip = await downloadDocumentsService(req.query);
     zip.pipe(res);
     await zip.finalize();
-    
   }
 );
 

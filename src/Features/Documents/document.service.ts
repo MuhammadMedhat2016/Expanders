@@ -1,6 +1,5 @@
 import {
   DocumentMetadata,
-  IDocument,
   QueryStringDocuments,
 } from './document.types';
 
@@ -8,7 +7,6 @@ import archiver from 'archiver';
 import { GridFS } from '../../Utils/TextGridFs';
 import { Readable } from 'node:stream';
 import { searchDocuments, searchDocumentsByText } from './document.repo';
-import { HydratedDocument } from 'mongoose';
 
 export function uploadDocumentService(documentMetadata: DocumentMetadata) {
   return GridFS.uploadDocument(documentMetadata);

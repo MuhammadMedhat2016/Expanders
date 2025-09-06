@@ -1,6 +1,6 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Vendor } from './Vendors';
-import { Country } from './Country';
+import { Vendor } from '../Vendors/vendors.entity';
+import { Country } from '../Countries/country.entity';
 @Entity()
 export class VendorCountries {
   @PrimaryColumn()
@@ -9,11 +9,11 @@ export class VendorCountries {
   @PrimaryColumn()
   country_id!: number;
 
+  @ManyToOne(() => Vendor)
   @JoinColumn({ name: 'vendor_id' })
-  @ManyToOne(() => Vendor, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   vendor!: Vendor;
 
+  @ManyToOne(() => Country)
   @JoinColumn({ name: 'country_id' })
-  @ManyToOne(() => Country, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   country!: Country;
 }

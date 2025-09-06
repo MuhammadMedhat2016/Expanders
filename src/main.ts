@@ -5,7 +5,8 @@ import express from 'express';
 import sql from 'mysql2/promise';
 import mongoose from 'mongoose';
 import { AppDataSource } from './dataSource';
-import { router } from './Features/Documents/document.routes';
+import { documentsRouter } from './Features/Documents/document.routes';
+import { projectRouter } from './Features/Projects/project.routes';
 async function connectMySQL() {
   try {
     const sqlConnection = await sql.createConnection({
@@ -41,12 +42,13 @@ async function connectMongoDB() {
 
 async function main() {
   await Promise.all([AppDataSource.initialize(), connectMongoDB()]);
-
   const app = express();
 
   app.use(express.json());
 
-  app.use('/documents', router);
+  app.use('/documents', documentsRouter);
+  app.use('/projects', projectRouter);
+  // app.use('')
 
   app.listen(process.env.PORT, () => {
     console.log(`server has started on port ${process.env.PORT}`);
