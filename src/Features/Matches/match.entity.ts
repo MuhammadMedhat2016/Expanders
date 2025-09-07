@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Project } from '../Projects/project.entity';
-import { Vendor } from '../Vendors/vendors.entity';
+import { Vendor } from '../Vendors/vendor.entity';
 @Entity()
 @Unique('project_vendor_UQ', ['project', 'vendor'])
 export class Match {

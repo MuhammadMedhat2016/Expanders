@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   Entity,
+  OneToMany,
 } from 'typeorm';
+import { Project } from '../Projects/project.entity';
 @Entity()
 export class Country {
   @PrimaryGeneratedColumn()
@@ -12,6 +14,10 @@ export class Country {
 
   @Column({ type: 'varchar', length: 255 })
   name!: string;
+
+  @OneToMany(() => Project, (project) => project.country)
+  project!: Project[]
+
 
   @CreateDateColumn()
   created_at!: Date;

@@ -1,5 +1,5 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Vendor } from '../Vendors/vendors.entity';
+import { Vendor } from '../Vendors/vendor.entity';
 import { Country } from '../Countries/country.entity';
 @Entity()
 export class VendorCountries {

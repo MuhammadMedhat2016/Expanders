@@ -1,5 +1,5 @@
 import { PrimaryColumn, JoinColumn, ManyToOne, Entity } from 'typeorm';
-import { Vendor } from '../Vendors/vendors.entity';
+import { Vendor } from '../Vendors/vendor.entity';
 import { Service } from '../Services/services.entity';
 
 @Entity()
@@ -16,5 +16,5 @@ export class VendorServices {
 
   @JoinColumn({ name: 'service_id' })
   @ManyToOne(() => Service)
-  vendorService!: Vendor;
+  vendorService!: Service;
 }

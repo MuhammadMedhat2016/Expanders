@@ -1,16 +1,9 @@
 import { AppDataSource } from '../../dataSource';
-import { Vendor } from '../Vendors/vendors.entity';
+import { Vendor } from '../Vendors/vendor.entity';
 import { Project } from './project.entity';
+import { PaginationOptions, ProjectSelection } from './project.types';
 
-export function getProject(projectId: number) {
-  const projectRepository = AppDataSource.getRepository(Project);
-  return projectRepository.findOne({
-    where: { id: projectId },
-    relations: {
-      services: true,
-    },
-  });
-}
+const projectRepository = AppDataSource.getRepository(Project);
 
 export function getProjectMatchesScores(
   projectId: number,
@@ -42,4 +35,27 @@ export function getProjectMatchesScores(
     .limit(limit)
     .offset(offset)
     .getRawMany();
+}
+
+export function getActiveProjects(
+  paginationOptions: PaginationOptions,
+  selectionOptions: ProjectSelection
+) {
+  return projectRepository.find({
+    where: {
+      status: 'active',
+    },
+    order: {
+      created_at: 'ASC',
+    },
+    select: selectionOptions,
+    take: paginationOptions.limit,
+    skip: paginationOptions.offset,
+  });
+
+  //   projectRepository
+  //     .createQueryBuilder('p')
+  //     .where('p.status = "active"')
+  //     .offset(offset)
+  //     .limit(limit);
 }

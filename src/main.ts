@@ -7,6 +7,8 @@ import mongoose from 'mongoose';
 import { AppDataSource } from './dataSource';
 import { documentsRouter } from './Features/Documents/document.routes';
 import { projectRouter } from './Features/Projects/project.routes';
+import { vendorRouter } from './Features/Vendors/vendor.routes';
+import './Utils/matchScheduledJob';
 async function connectMySQL() {
   try {
     const sqlConnection = await sql.createConnection({
@@ -48,6 +50,7 @@ async function main() {
 
   app.use('/documents', documentsRouter);
   app.use('/projects', projectRouter);
+  app.use('/vendors', vendorRouter);
   // app.use('')
 
   app.listen(process.env.PORT, () => {

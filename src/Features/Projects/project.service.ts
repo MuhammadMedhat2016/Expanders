@@ -1,5 +1,24 @@
 import { upsertMatchesService } from '../Matches/match.service';
-import { getProjectMatchesScores } from './project.repo';
+import { getActiveProjects, getProjectMatchesScores } from './project.repo';
+import { PaginationOptions, ProjectSelection } from './project.types';
+
+const defualtProjectSelectionOptions: ProjectSelection = {
+  id: true,
+  budget: true,
+  status: true,
+  created_at: true,
+  updated_at: true,
+  client: true,
+  client_id: true,
+  country: true,
+  country_id: true,
+  services: true,
+};
+
+const defaultPaginationOptions: PaginationOptions = {
+  offset: 0,
+  limit: 100,
+};
 
 export async function buildProjectMatchesService(projectId: number) {
   let matches: any[] = [];
@@ -14,10 +33,21 @@ export async function buildProjectMatchesService(projectId: number) {
       match.project_id = projectId;
       return match;
     });
-    console.log(matches);
-    await upsertMatchesService(matches);
+    console.log(await upsertMatchesService(matches));
   } while (matches.length > 0);
 }
+
+export async function getActiveProjectsSerivce(
+  projectSelection = defaultPaginationOptions,
+  selectionOptions = defualtProjectSelectionOptions
+) {
+  return getActiveProjects(projectSelection, selectionOptions);
+}
+
+
+
+
+
 
 //const project = await getProject(projectId);
 

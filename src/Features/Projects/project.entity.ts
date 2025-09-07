@@ -27,11 +27,11 @@ export class Project {
   @ManyToOne(() => Client)
   @JoinColumn({ name: 'client_id' })
   client!: Client;
-  
+
   @Column()
   client_id!: number;
 
-  @OneToOne(() => Country)
+  @ManyToOne(() => Country)
   @JoinColumn({ name: 'country_id' })
   country!: Country;
 
