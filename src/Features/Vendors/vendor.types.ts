@@ -6,8 +6,8 @@ export interface VendorSelection {
   name?: boolean;
   rating?: boolean;
   response_sla_hours?: boolean;
-  countries?: VendorCountriesSelection | boolean;
-  services?: VendorServicesSelection | boolean;
+  countries?: boolean;
+  services?: boolean;
   created_at?: boolean;
   updated_at?: boolean;
 }

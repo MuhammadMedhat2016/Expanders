@@ -7,10 +7,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { AppDataSource } from './dataSource';
 import { projectsRouter } from './Features/Projects/projects.routes';
-import {
-  analyticsRouter,
-  vendorsRouter,
-} from './Features/Vendors/vendor.routes';
+import { vendorsRouter } from './Features/Vendors/vendor.routes';
 import { signup } from './AuthControllers/signup.controller';
 import { login } from './AuthControllers/login.controller';
 import { authenticateUser } from './AuthControllers/authentication.controller';
@@ -19,6 +16,7 @@ import { errorHandler } from './Utils/globalErrorHandler';
 import { adminRouter } from './Features/Admins/admin.route';
 import { addCountry } from './Features/Countries/country.controller';
 import { servicesRouter } from './Features/Services/services.routes';
+import { analyticsRouter } from './Features/Analytics/analytics.routes';
 
 async function connectMySQL() {
   try {
@@ -68,6 +66,8 @@ async function main() {
   app.use('/vendors', protect('admin'), vendorsRouter);
   app.use('/countries', protect('admin'), addCountry);
   app.use('/services', protect('admin'), servicesRouter);
+  app.use('/analytics', protect('admin'), analyticsRouter);
+
   app.use(errorHandler);
   app.listen(process.env.PORT, () => {
     console.log(`server has started on port ${process.env.PORT}`);
