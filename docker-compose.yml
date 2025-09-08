@@ -1,0 +1,32 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mongo-db
+    volumes:
+      - mongo-data:/data/db
+
+  mysql:
+    image: mysql:8.4
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: expanders  
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  expanders:
+    container_name: expanders-api
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      SQL_HOST: mysql                 
+      SQL_USER: root
+      SQL_PASS: example
+      MONGO_HOST: mongodb
+    depends_on:
+      - mysql
+      - mongodb
+volumes:
+  mongo-data:
+  mysql-data:

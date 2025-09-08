@@ -3,7 +3,11 @@ import { DocumentMetadata, QueryStringDocuments } from './document.types';
 import archiver from 'archiver';
 import { GridFS } from '../../Utils/TextGridFs';
 import { Readable } from 'node:stream';
-import { searchDocuments, searchDocumentsByText } from './document.repo';
+import {
+  countProjectsDocuments,
+  searchDocuments,
+  searchDocumentsByText,
+} from './document.repo';
 
 export function uploadDocumentService(documentMetadata: DocumentMetadata) {
   return GridFS.uploadDocument(documentMetadata);
@@ -48,4 +52,8 @@ export async function downloadDocumentsService(
   });
 
   return zib;
+}
+
+export async function countProjectsDocumentsService(projectIds: number[]) {
+  return countProjectsDocuments(projectIds);
 }

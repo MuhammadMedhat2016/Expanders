@@ -18,7 +18,6 @@ export class Country {
   @OneToMany(() => Project, (project) => project.country)
   project!: Project[]
 
-
   @CreateDateColumn()
   created_at!: Date;
 

@@ -1,14 +1,16 @@
 import { AppDataSource } from '../../dataSource';
+import { ProjectServices } from '../ProjectServices/projectServices.entity';
 import { Vendor } from '../Vendors/vendor.entity';
 import { Project } from './project.entity';
 import {
   PaginationOptions,
+  ProjectCreation,
   ProjectPopulationOptions,
   ProjectSelection,
 } from './project.types';
 
 const projectRepository = AppDataSource.getRepository(Project);
-
+const projectServiceRepository = AppDataSource.getRepository(ProjectServices);
 export function getProjectMatchesScores(projectId: number) {
   const vendorRepository = AppDataSource.getRepository(Vendor);
   const query = vendorRepository.createQueryBuilder('v');
@@ -65,6 +67,7 @@ export function getClientProject(
 ) {
   return projectRepository.findOne({
     where: { client_id: clientId, id: projectId },
+    select: projectSelectionOptions,
   });
 }
 
@@ -75,5 +78,24 @@ export function getClientProjects(
   return projectRepository.find({
     where: { client_id: clientId },
     select: projectSelectionOptions,
+  });
+}
+
+export function createProject(projectData: ProjectCreation) {
+  return projectRepository.insert({
+    client_id: projectData.clientId,
+    budget: projectData.budget,
+    country_id: projectData.countryId,
+    status: projectData.status,
+  });
+}
+
+export function addProjectRequiredService(
+  projectId: number,
+  serviceId: number
+) {
+  return projectServiceRepository.insert({
+    service_id: serviceId,
+    project_id: projectId,
   });
 }

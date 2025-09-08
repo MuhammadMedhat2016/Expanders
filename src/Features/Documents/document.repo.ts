@@ -170,3 +170,17 @@ export function searchDocuments(
 
   return Document.aggregate(pipeline);
 }
+
+export async function countProjectsDocuments(projectsIds: number[]) {
+  const pipeline = [
+    {
+      $match: {
+        projectId: { $in: projectsIds },
+      },
+    },
+    {
+      $count: 'projectsCount',
+    },
+  ];
+  return Document.aggregate(pipeline);
+}

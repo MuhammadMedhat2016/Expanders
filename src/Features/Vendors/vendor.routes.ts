@@ -1,8 +1,16 @@
 import express from 'express';
-import { getTopThreeVendorsPerCountry } from './vendor.controller';
+import {
+  addVendor,
+  addVendorCountry,
+  addVendorSerivce,
+  getTopThreeVendorsPerCountry,
+} from './vendor.controller';
 
 const router = express.Router();
 
-router.get('/test', getTopThreeVendorsPerCountry);
+router.get('/top-vendors', getTopThreeVendorsPerCountry);
 
-export const vendorRouter = router;
+router.post('/', addVendor);
+router.post('/:vendorId/countries/:countryId', addVendorCountry);
+router.post('/:vendorId/services/:serviceId', addVendorSerivce);
+export const vendorsRouter = router;

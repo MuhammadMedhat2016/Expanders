@@ -6,7 +6,8 @@
   "scripts": {
     "start:dev:compile": "tsc -w",
     "start:dev:run": "nodemon ./dist/main.js",
-    "start:dev": "concurrently npm:start:dev:*"
+    "start:dev": "concurrently npm:start:dev:*",
+    "start": "node ./dist/main.js"
   },
   "keywords": [
     "expanders"

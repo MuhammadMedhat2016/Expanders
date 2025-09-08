@@ -7,13 +7,18 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { AppDataSource } from './dataSource';
 import { projectsRouter } from './Features/Projects/projects.routes';
-import { vendorRouter } from './Features/Vendors/vendor.routes';
+import {
+  analyticsRouter,
+  vendorsRouter,
+} from './Features/Vendors/vendor.routes';
 import { signup } from './AuthControllers/signup.controller';
 import { login } from './AuthControllers/login.controller';
 import { authenticateUser } from './AuthControllers/authentication.controller';
 import { protect } from './AuthControllers/authorization.controller';
 import { errorHandler } from './Utils/globalErrorHandler';
 import { adminRouter } from './Features/Admins/admin.route';
+import { addCountry } from './Features/Countries/country.controller';
+import { servicesRouter } from './Features/Services/services.routes';
 
 async function connectMySQL() {
   try {
@@ -58,9 +63,11 @@ async function main() {
   app.post('/login', login);
   app.post('/signup', signup);
   app.use(authenticateUser);
-  app.use('/admins', protect('admin'), adminRouter);
+  app.use('/admins', adminRouter);
   app.use('/projects', protect('client'), projectsRouter);
-  app.use('/vendors', vendorRouter);
+  app.use('/vendors', protect('admin'), vendorsRouter);
+  app.use('/countries', protect('admin'), addCountry);
+  app.use('/services', protect('admin'), servicesRouter);
   app.use(errorHandler);
   app.listen(process.env.PORT, () => {
     console.log(`server has started on port ${process.env.PORT}`);

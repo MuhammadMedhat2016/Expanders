@@ -1,37 +1,20 @@
-import { ApiError } from '../../Utils/ApiError';
 import { upsertMatchesService } from '../Matches/match.service';
 import {
+  addProjectRequiredService,
+  createProject,
   getActiveProjects,
   getClientProject,
   getClientProjects,
   getProjectMatchesScores,
 } from './project.repo';
+import { ApiError } from '../../Utils/ApiError';
+
 import {
-  PaginationOptions,
-  ProjectPopulationOptions,
-  ProjectSelection,
+  defaultProjectPaginationOptions,
+  defaultProjectRelationPopulation,
+  defualtProjectSelectionOptions,
+  ProjectCreation,
 } from './project.types';
-
-const defualtProjectSelectionOptions: ProjectSelection = {
-  id: true,
-  budget: true,
-  status: true,
-  created_at: true,
-  updated_at: true,
-  client_id: true,
-  country_id: true,
-};
-
-const defaultPaginationOptions: PaginationOptions = {
-  offset: 0,
-  limit: 100,
-};
-
-const defaultRelationPopulation: ProjectPopulationOptions = {
-  client: false,
-  country: false,
-  services: false,
-};
 
 export async function buildProjectMatchesService(projectId: number) {
   let matches: any[] = [];
@@ -67,8 +50,8 @@ export function getProjectMatchesCountService(projectId: number) {
 }
 
 export async function getActiveProjectsSerivce(
-  paginationOptions = defaultPaginationOptions,
-  relationPopulation = defaultRelationPopulation,
+  paginationOptions = defaultProjectPaginationOptions,
+  relationPopulation = defaultProjectRelationPopulation,
   selectionOptions = defualtProjectSelectionOptions
 ) {
   return getActiveProjects(
@@ -98,30 +81,26 @@ export async function getClientProjectsService(
   return getClientProjects(clientId, projectSelectionOptions);
 }
 
-//const project = await getProject(projectId);
+export async function createProjectService(projectData: ProjectCreation) {
+  return createProject(projectData);
+}
 
-// const projectCountryId = project?.country_id;
-
-// const projectRequiredServiceIds =
-//   project?.services.map((service) => {
-//     return service.service_id;
-//   }) || [];
-
-// const vendorRepository = AppDataSource.getRepository(Vendor);
-
-// const vendors = await vendorRepository.find({
-//   skip: 0,
-//   take: 10,
-//   relations: {
-//     services: true,
-//     countries: true,
-//   },
-//   where: {
-//     services: {
-//       service_id: In(projectRequiredServiceIds),
-//     },
-//     countries: {
-//       country_id: projectCountryId,
-//     },
-//   },
-// });
+export async function addProjectRequiredServiceService(
+  projectId: number,
+  serviceId: number
+) {
+  try {
+    return await addProjectRequiredService(projectId, serviceId);
+  } catch (error: any) {
+    if (error.errno === 1062) {
+      throw new ApiError(
+        'this service already exists on this project',
+        400,
+        'fail'
+      );
+    } else if (error.errno == 1452) {
+      throw new ApiError('no service exists with this id', 400, 'fail');
+    }
+    throw error;
+  }
+}

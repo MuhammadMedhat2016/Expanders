@@ -4,3 +4,7 @@ export interface ServiceSelection {
   created_at?: boolean;
   updated_at?: boolean;
 }
+
+export interface ServiceCreation {
+  name: string;
+}

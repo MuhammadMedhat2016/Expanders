@@ -24,6 +24,7 @@ export function getUserById(id: number) {
     where: { id },
     select: {
       role: true,
+      id: true,
       user_name: true,
       created_at: true,
       updated_at: true,

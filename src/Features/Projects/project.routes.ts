@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  addProjectService,
   authorizeClientProject,
   buildProjectMatches,
 } from './project.controller';
@@ -16,5 +17,7 @@ router.put(
   authorizeClientProject('projectId', 'params'),
   buildProjectMatches
 );
+
+router.post('/services/:serviceId', addProjectService);
 
 export const projectRouter = router;
