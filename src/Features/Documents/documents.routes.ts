@@ -2,14 +2,11 @@ import express from 'express';
 import {
   downloadDocuments,
   getDocuments,
-  uploadDocument,
-  uploadDocumentMulter,
 } from './document.controller';
 
 const router = express.Router({ mergeParams: true });
-// https://localhost:3000/projects/:projectId/docuements
+// https://localhost:3000/projects/docuements
 router.get('/downloads', downloadDocuments);
-router.post('/', uploadDocumentMulter.single('document'), uploadDocument);
 router.get('/', getDocuments);
 
-export const projectDocumentRouter = router;
+export const allProjectDocumentsRouter = router;

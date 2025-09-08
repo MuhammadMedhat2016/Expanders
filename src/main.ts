@@ -1,14 +1,20 @@
 import dotenv from 'dotenv';
 dotenv.config();
-
+import './Utils/matchScheduledJob';
 import express from 'express';
 import sql from 'mysql2/promise';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 import { AppDataSource } from './dataSource';
-import { documentsRouter } from './Features/Documents/document.routes';
-import { projectRouter } from './Features/Projects/project.routes';
+import { projectsRouter } from './Features/Projects/projects.routes';
 import { vendorRouter } from './Features/Vendors/vendor.routes';
-import './Utils/matchScheduledJob';
+import { signup } from './AuthControllers/signup.controller';
+import { login } from './AuthControllers/login.controller';
+import { authenticateUser } from './AuthControllers/authentication.controller';
+import { protect } from './AuthControllers/authorization.controller';
+import { errorHandler } from './Utils/globalErrorHandler';
+import { adminRouter } from './Features/Admins/admin.route';
+
 async function connectMySQL() {
   try {
     const sqlConnection = await sql.createConnection({
@@ -47,12 +53,15 @@ async function main() {
   const app = express();
 
   app.use(express.json());
+  app.use(cookieParser());
 
-  app.use('/documents', documentsRouter);
-  app.use('/projects', projectRouter);
+  app.post('/login', login);
+  app.post('/signup', signup);
+  app.use(authenticateUser);
+  app.use('/admins', protect('admin'), adminRouter);
+  app.use('/projects', protect('client'), projectsRouter);
   app.use('/vendors', vendorRouter);
-  // app.use('')
-
+  app.use(errorHandler);
   app.listen(process.env.PORT, () => {
     console.log(`server has started on port ${process.env.PORT}`);
   });

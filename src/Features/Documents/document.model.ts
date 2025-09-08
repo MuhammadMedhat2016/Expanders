@@ -4,7 +4,7 @@ import { IDocument } from './document.types';
 const documentSchema = new mongoose.Schema<IDocument>(
   {
     projectId: {
-      type: String,
+      type: Number,
       required: true,
     },
     mimeType: String,

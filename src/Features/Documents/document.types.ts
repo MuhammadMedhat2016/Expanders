@@ -1,5 +1,5 @@
 export interface IDocument {
-  projectId: string;
+  projectId: number;
   tags: string[];
   size: number;
   mimeType: string;
@@ -13,7 +13,6 @@ export type DocumentMetadata = IDocument & {
 };
 
 export interface UploadDocumentBody {
-  projectId: string;
   title: string;
   tags: string;
 }

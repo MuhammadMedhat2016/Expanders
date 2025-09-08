@@ -1,6 +1,16 @@
+import { ApiError } from '../../Utils/ApiError';
 import { upsertMatchesService } from '../Matches/match.service';
-import { getActiveProjects, getProjectMatchesScores } from './project.repo';
-import { PaginationOptions, ProjectSelection } from './project.types';
+import {
+  getActiveProjects,
+  getClientProject,
+  getClientProjects,
+  getProjectMatchesScores,
+} from './project.repo';
+import {
+  PaginationOptions,
+  ProjectPopulationOptions,
+  ProjectSelection,
+} from './project.types';
 
 const defualtProjectSelectionOptions: ProjectSelection = {
   id: true,
@@ -8,11 +18,8 @@ const defualtProjectSelectionOptions: ProjectSelection = {
   status: true,
   created_at: true,
   updated_at: true,
-  client: true,
   client_id: true,
-  country: true,
   country_id: true,
-  services: true,
 };
 
 const defaultPaginationOptions: PaginationOptions = {
@@ -20,34 +27,76 @@ const defaultPaginationOptions: PaginationOptions = {
   limit: 100,
 };
 
+const defaultRelationPopulation: ProjectPopulationOptions = {
+  client: false,
+  country: false,
+  services: false,
+};
+
 export async function buildProjectMatchesService(projectId: number) {
   let matches: any[] = [];
   let offset = 0;
   const LIMIT = 100;
-
+  let anyRowsInserted = false;
   do {
-    matches = await getProjectMatchesScores(projectId, offset, LIMIT);
-    offset += LIMIT;
+    if (matches.length != 0) {
+      const upsertionResult = await upsertMatchesService(matches);
+      console.log(upsertionResult);
+      anyRowsInserted =
+        upsertionResult.raw.insertId != 0 ? true : anyRowsInserted;
+    }
+
+    matches = await getProjectMatchesScores(projectId)
+      .limit(LIMIT)
+      .offset(offset)
+      .getRawMany();
+
+    offset += matches.length;
 
     matches = matches.map((match) => {
       match.project_id = projectId;
       return match;
     });
-    console.log(await upsertMatchesService(matches));
   } while (matches.length > 0);
+
+  return anyRowsInserted;
+}
+
+export function getProjectMatchesCountService(projectId: number) {
+  return getProjectMatchesScores(projectId).getCount();
 }
 
 export async function getActiveProjectsSerivce(
-  projectSelection = defaultPaginationOptions,
+  paginationOptions = defaultPaginationOptions,
+  relationPopulation = defaultRelationPopulation,
   selectionOptions = defualtProjectSelectionOptions
 ) {
-  return getActiveProjects(projectSelection, selectionOptions);
+  return getActiveProjects(
+    paginationOptions,
+    relationPopulation,
+    selectionOptions
+  );
 }
 
+export async function getClientProjectService(
+  clientId: number,
+  projectId: number,
+  projectSelectionOptions = defualtProjectSelectionOptions
+) {
+  const project = await getClientProject(
+    clientId,
+    projectId,
+    projectSelectionOptions
+  );
+  return project;
+}
 
-
-
-
+export async function getClientProjectsService(
+  clientId: number,
+  projectSelectionOptions = defualtProjectSelectionOptions
+) {
+  return getClientProjects(clientId, projectSelectionOptions);
+}
 
 //const project = await getProject(projectId);
 

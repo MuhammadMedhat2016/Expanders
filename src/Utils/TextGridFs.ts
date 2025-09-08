@@ -2,13 +2,11 @@ import { Readable } from 'node:stream';
 import mongoose from 'mongoose';
 import { IDocument } from '../Features/Documents/document.types';
 import { createReadStream } from 'node:fs';
-import { Chunk } from '../Features/Chunks/chunks.schema';
+import { Chunk } from '../Features/Chunks/chunks.model';
 import { IChunk } from '../Features/Chunks/chunks.types';
 
 import { DocumentMetadata } from '../Features/Documents/document.types';
-import { Document } from '../Features/Documents/document.schema';
-
-
+import { Document } from '../Features/Documents/document.model';
 
 interface StreamState {
   chunksLoaded: number;

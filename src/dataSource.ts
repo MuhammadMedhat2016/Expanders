@@ -9,6 +9,8 @@ import { ProjectServices } from './Features/ProjectServices/projectServices.enti
 import { Service } from './Features/Services/services.entity';
 import { Country } from './Features/Countries/country.entity';
 import { Match } from './Features/Matches/match.entity';
+import { User } from './Features/Users/user.entity';
+import { Admin } from './Features/Admins/admin.entity';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -18,8 +20,9 @@ export const AppDataSource = new DataSource({
   password: process.env.SQL_PASS,
   database: process.env.SQL_DATABASE_NAME,
   synchronize: true,
-  logging: false,
   entities: [
+    User,
+    Admin,
     Client,
     Project,
     Vendor,
@@ -30,6 +33,4 @@ export const AppDataSource = new DataSource({
     Match,
     Country,
   ],
-  migrations: [],
-  subscribers: [],
 });

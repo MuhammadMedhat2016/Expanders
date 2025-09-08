@@ -1,4 +1,5 @@
 import { ProjectSelection } from '../Projects/project.types';
+import { CreateUser } from '../Users/user.types';
 
 export interface ClientSelection {
   id?: boolean;
@@ -7,4 +8,10 @@ export interface ClientSelection {
   created_at?: boolean;
   updated_at?: boolean;
   projects?: ProjectSelection | boolean;
+}
+
+export interface CreateClient extends CreateUser {
+  company_name: string;
+  contact_email: string;
+  user_id: number;
 }

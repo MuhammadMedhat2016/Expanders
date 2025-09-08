@@ -1,5 +1,9 @@
+import { ApiError } from '../../Utils/ApiError';
 import { asyncCatch } from '../../Utils/asyncCatch';
-import { buildProjectMatchesService } from './project.service';
+import {
+  buildProjectMatchesService,
+  getClientProjectService,
+} from './project.service';
 import { ProjectMatchesRebuildParams } from './project.types';
 
 export const buildProjectMatches = asyncCatch<ProjectMatchesRebuildParams>(
@@ -19,3 +23,27 @@ export const buildProjectMatches = asyncCatch<ProjectMatchesRebuildParams>(
     });
   }
 );
+
+export const authorizeClientProject = (
+  fieldName: string,
+  requestProperty: 'params' | 'query' | 'headers' | 'body'
+) => {
+  return asyncCatch(async (req, res, next) => {
+    const project = await getClientProjectService(
+      req.user?.id!,
+      Number(
+        req[requestProperty][fieldName] ||
+          Number(req[requestProperty][fieldName])
+      )
+    );
+    if (!project) {
+      throw new ApiError(
+        'you are not allowed to access this project',
+        403,
+        'fail'
+      );
+    }
+
+    next();
+  });
+};

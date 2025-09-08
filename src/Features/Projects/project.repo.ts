@@ -1,15 +1,15 @@
 import { AppDataSource } from '../../dataSource';
 import { Vendor } from '../Vendors/vendor.entity';
 import { Project } from './project.entity';
-import { PaginationOptions, ProjectSelection } from './project.types';
+import {
+  PaginationOptions,
+  ProjectPopulationOptions,
+  ProjectSelection,
+} from './project.types';
 
 const projectRepository = AppDataSource.getRepository(Project);
 
-export function getProjectMatchesScores(
-  projectId: number,
-  offset: number,
-  limit: number
-) {
+export function getProjectMatchesScores(projectId: number) {
   const vendorRepository = AppDataSource.getRepository(Vendor);
   const query = vendorRepository.createQueryBuilder('v');
   return query
@@ -31,14 +31,12 @@ export function getProjectMatchesScores(
       return `(vc.country_id, vs.service_id) in ` + sub;
     })
     .groupBy('v.id')
-    .orderBy('score')
-    .limit(limit)
-    .offset(offset)
-    .getRawMany();
+    .orderBy('score');
 }
 
 export function getActiveProjects(
   paginationOptions: PaginationOptions,
+  relationPopulation: ProjectPopulationOptions,
   selectionOptions: ProjectSelection
 ) {
   return projectRepository.find({
@@ -48,14 +46,34 @@ export function getActiveProjects(
     order: {
       created_at: 'ASC',
     },
+    relations: relationPopulation,
     select: selectionOptions,
     take: paginationOptions.limit,
     skip: paginationOptions.offset,
   });
-
   //   projectRepository
   //     .createQueryBuilder('p')
   //     .where('p.status = "active"')
   //     .offset(offset)
   //     .limit(limit);
+}
+
+export function getClientProject(
+  clientId: number,
+  projectId: number,
+  projectSelectionOptions: ProjectSelection
+) {
+  return projectRepository.findOne({
+    where: { client_id: clientId, id: projectId },
+  });
+}
+
+export function getClientProjects(
+  clientId: number,
+  projectSelectionOptions: ProjectSelection
+) {
+  return projectRepository.find({
+    where: { client_id: clientId },
+    select: projectSelectionOptions,
+  });
 }

@@ -1,7 +1,4 @@
-import {
-  DocumentMetadata,
-  QueryStringDocuments,
-} from './document.types';
+import { DocumentMetadata, QueryStringDocuments } from './document.types';
 
 import archiver from 'archiver';
 import { GridFS } from '../../Utils/TextGridFs';
@@ -16,20 +13,26 @@ export function streamDocumentService(documentId: string): Promise<Readable> {
   return GridFS.streamDocument(documentId);
 }
 
-export function getDocumentsService(query: QueryStringDocuments) {
+export function getDocumentsService(
+  projects: number[],
+  query: QueryStringDocuments
+) {
   if (query.text) {
-    return searchDocumentsByText(query);
+    return searchDocumentsByText(projects, query);
   } else {
-    return searchDocuments(query);
+    return searchDocuments(projects, query);
   }
 }
 
-export async function downloadDocumentsService(query: QueryStringDocuments) {
+export async function downloadDocumentsService(
+  projects: number[],
+  query: QueryStringDocuments
+) {
   let documents = [];
   if (query.text) {
-    documents = await searchDocumentsByText(query);
+    documents = await searchDocumentsByText(projects, query);
   } else {
-    documents = await searchDocuments(query);
+    documents = await searchDocuments(projects, query);
   }
   const zib = archiver('zip', { zlib: { level: 9 } });
 

@@ -8,5 +8,9 @@ declare namespace NodeJS {
     SQL_DATABASE_NAME: string;
     MONGO_HOST: string;
     MONGO_PORT: string;
+    GMAIL_USER: string;
+    GMAIL_APP_PASSWORD: string;
+    JWT_SECRET: string;
+
   }
 }

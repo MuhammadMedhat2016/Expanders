@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Document } from './document.schema';
+import { Document } from './document.model';
 import { QueryStringDocuments } from './document.types';
 
 export function getDocument(documentId: string) {
@@ -50,26 +50,21 @@ export function getDocumentChunks(documentId: string) {
   ]);
 }
 
-export async function searchDocumentsByText({
-  project,
-  tags,
-  title,
-  text,
-  skip,
-  limit,
-}: QueryStringDocuments) {
+export async function searchDocumentsByText(
+  projects: number[],
+  { tags, title, text, skip, limit }: QueryStringDocuments
+) {
   const Chunk = mongoose.connection.model('Chunk');
 
   let matchStage: any = {};
 
-  if (project) matchStage['doc.projectId'] = project;
+  matchStage['doc.projectId'] = { $in: projects };
 
   if (tags)
     matchStage['doc.tags'] = {
       $all: tags?.split(',').map((val) => val.trim()),
     };
   if (title) matchStage['doc.name'] = title;
-
   const pipeline: any[] = [
     {
       $match: {
@@ -110,20 +105,16 @@ export async function searchDocumentsByText({
     { $skip: Number(skip) ? Number(skip) : 0 },
     { $limit: Number(limit) ? Number(limit) : 10 },
   ];
-
+  console.log(pipeline);
   return Chunk.aggregate(pipeline);
 }
 
-export function searchDocuments({
-  project,
-  tags,
-  title,
-  skip,
-  limit,
-}: QueryStringDocuments) {
+export function searchDocuments(
+  projects: number[],
+  { tags, title, skip, limit }: QueryStringDocuments
+) {
   let matchStage: any = {};
-
-  if (project) matchStage['projectId'] = project;
+  matchStage['projectId'] = { $in: projects };
 
   if (tags)
     matchStage['tags'] = {

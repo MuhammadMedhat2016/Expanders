@@ -1,29 +1,30 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   OneToMany,
+  OneToOne,
+  Unique,
+  JoinColumn,
+  PrimaryColumn,
 } from 'typeorm';
 import { Project } from '../Projects/project.entity';
+import { User } from '../Users/user.entity';
 
 @Entity()
+@Unique('contact_email_UQ', ['contact_email'])
 export class Client {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryColumn()
+  user_id!: number;
+
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user!: User;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   company_name!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   contact_email!: string;
-
-  @CreateDateColumn()
-  created_at!: Date;
-
-  @UpdateDateColumn()
-  updated_at!: Date | null;
 
   @OneToMany(() => Project, (project) => project.client)
   projects!: Project[];

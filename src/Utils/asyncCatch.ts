@@ -20,7 +20,8 @@ export type RouteHandler<
   Locals extends Record<string, any>
 > = (
   req: TypedRequest<Params, ReqBody, ReqQuery, Locals>,
-  res: TypedResponse<ResBody, Locals>
+  res: TypedResponse<ResBody, Locals>,
+  next: NextFunction
 ) => any;
 
 export function asyncCatch<
@@ -29,15 +30,14 @@ export function asyncCatch<
   ReqBody = any,
   ReqQuery = Record<string, string>,
   Locals extends Record<string, any> = Record<string, any>
->
-(routeHandler: RouteHandler<Params, ResBody, ReqBody, ReqQuery, Locals>) {
+>(routeHandler: RouteHandler<Params, ResBody, ReqBody, ReqQuery, Locals>) {
   return async function (
     req: TypedRequest<Params, ReqBody, ReqQuery, Locals>,
     res: TypedResponse<ResBody, Locals>,
     next: NextFunction
   ) {
     try {
-      await routeHandler(req, res);
+      await routeHandler(req, res, next);
     } catch (error) {
       next(error);
     }
