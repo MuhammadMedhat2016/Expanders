@@ -53,7 +53,7 @@ JWT_SECRET=your_long_secret_key
 ## 📦 Installation
 Make sure you have Node.js and TypeScript installed.
 
-# Create a directory/folder with name "uploads" in the main project directory
+Create a directory/folder with name "uploads" in the main project directory
 
 # Install dependencies
 npm install
