@@ -3,3 +3,4 @@ uploads
 dist
 .dockerignore
 .gitignore
+.env
