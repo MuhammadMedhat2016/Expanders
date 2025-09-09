@@ -63,9 +63,7 @@ npm run start:dev (this will compile and run the code all in one go)
 
 ## 🧪 Postman Collection
 
-A Postman collection (expanders.postman_collection.json) is included in the project.
-Import it into Postman
- to test API endpoints quickly.
+A Postman collection (Expanders360.postman_collection.json) is included in the project. Import it into Postman to test API endpoints quickly.
 
 ---
 
